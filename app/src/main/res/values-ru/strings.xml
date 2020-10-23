@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ЛофтМани</string>
+    <string name="app_name">Учёт бюджета</string>
     <string name="edittext_name_hint">Название</string>
     <string name="edittext_price_hint">Цена</string>
     <string name="add_button_title">Добавить</string>

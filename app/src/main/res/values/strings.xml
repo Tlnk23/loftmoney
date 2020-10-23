@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LoftMoney</string>
+    <string name="app_name">Budget accounting</string>
     <string name="edittext_name_hint">Name</string>
     <string name="edittext_price_hint">Price</string>
     <string name="add_button_title">Add</string>
