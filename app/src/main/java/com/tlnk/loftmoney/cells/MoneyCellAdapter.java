@@ -3,6 +3,7 @@ package com.tlnk.loftmoney.cells;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,8 +15,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.MoneyViewHolder> {
-
+    private Button addButton;
     private List<MoneyItem> moneyItemList = new ArrayList<>();
+
+
 
     public void setData(List<MoneyItem> moneyItems) {
             moneyItemList.clear();
