@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,67 +23,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetFragment extends Fragment {
+
     private FloatingActionButton btnAdd;
     private RecyclerView itemsView;
-
     private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
     private List<MoneyItem> moneyItems = new ArrayList<>();
-
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
 
-        TabLayout tabLayout = view.findViewById(R.id.tabs);
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.expences));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.income));
-        tabLayout.addTab(tabLayout.newTab().setText(R.string.balance));
-
-        btnAdd = view.findViewById(R.id.addNewExpense);
-
-        configureRecyclerView();
-
-        generateMoney(moneyItems);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         itemsView.addItemDecoration(dividerItemDecoration);
 
-
-
+        btnAdd = view.findViewById(R.id.addNewExpense);
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddItemActivity.class);
+                Intent intent = new Intent(getContext(), AddItemActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
+
+        itemsView = view.findViewById(R.id.itemsView);
+        itemsView.setAdapter(moneyCellAdapter);
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
+                LinearLayoutManager.VERTICAL, false);
+
+        itemsView.setLayoutManager(layoutManager);
+
+    return view;
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String nameAdd = data.getStringExtra("name");
-        String priceAdd = data.getStringExtra("price") + " ₽";
+        String priceAdd = data.getStringExtra("price");
 
         moneyItems.add(new MoneyItem(nameAdd, priceAdd));
         moneyCellAdapter.setData(moneyItems);
+
     }
-
-
-    private void generateMoney(List<MoneyItem> moneyItems) {
-        moneyCellAdapter.setData(moneyItems);
-    }
-
-    @SuppressLint("WrongViewCast")
-    private void configureRecyclerView() {
-        itemsView = findViewById(R.id.itemsView);
-        itemsView.setAdapter(moneyCellAdapter);
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
-                LinearLayoutManager.VERTICAL, false);
-
-        itemsView.setLayoutManager(layoutManager);
-    }
-
 }
+
