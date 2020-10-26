@@ -3,10 +3,14 @@ package com.tlnk.loftmoney;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,31 +23,31 @@ import com.tlnk.loftmoney.cells.MoneyItem;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class BudgetFragment extends Fragment {
     private FloatingActionButton btnAdd;
     private RecyclerView itemsView;
-
 
     private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
     private List<MoneyItem> moneyItems = new ArrayList<>();
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        TabLayout tabLayout = findViewById(R.id.tabs);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_budget, null);
+
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
         tabLayout.addTab(tabLayout.newTab().setText(R.string.expences));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.income));
         tabLayout.addTab(tabLayout.newTab().setText(R.string.balance));
 
-        btnAdd = findViewById(R.id.addNewExpense);
+        btnAdd = view.findViewById(R.id.addNewExpense);
 
         configureRecyclerView();
 
         generateMoney(moneyItems);
 
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         itemsView.addItemDecoration(dividerItemDecoration);
 
@@ -52,14 +56,14 @@ public class MainActivity extends AppCompatActivity {
         btnAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+                Intent intent = new Intent(getActivity(), AddItemActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         String nameAdd = data.getStringExtra("name");
         String priceAdd = data.getStringExtra("price") + " ₽";
@@ -77,10 +81,10 @@ public class MainActivity extends AppCompatActivity {
     private void configureRecyclerView() {
         itemsView = findViewById(R.id.itemsView);
         itemsView.setAdapter(moneyCellAdapter);
-
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext(),
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
 
         itemsView.setLayoutManager(layoutManager);
     }
+
 }
