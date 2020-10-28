@@ -1,6 +1,6 @@
 package com.tlnk.loftmoney;
 
-import android.annotation.SuppressLint;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.tabs.TabLayout;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
 import com.tlnk.loftmoney.cells.MoneyItem;
 
@@ -33,6 +32,7 @@ public class BudgetFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_budget, null);
+        itemsView = view.findViewById(R.id.itemsView);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
@@ -47,7 +47,6 @@ public class BudgetFragment extends Fragment {
             }
         });
 
-        itemsView = view.findViewById(R.id.itemsView);
         itemsView.setAdapter(moneyCellAdapter);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
@@ -64,7 +63,7 @@ public class BudgetFragment extends Fragment {
         String nameAdd = data.getStringExtra("name");
         String priceAdd = data.getStringExtra("price");
 
-        moneyItems.add(new MoneyItem(nameAdd, priceAdd));
+        moneyItems.add(new MoneyItem(nameAdd, priceAdd + " ₽"));
         moneyCellAdapter.setData(moneyItems);
 
     }
