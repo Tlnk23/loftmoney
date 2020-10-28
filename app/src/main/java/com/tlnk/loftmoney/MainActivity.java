@@ -19,11 +19,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Вот это что? в курсе показывали так
-        //Это показывали как работать с фрагментами и всё. Тебе надо тут написать код для работы с табами и в зависимости от выбранного таба будет загружаться свой фрагмент (Расходы, дохады или баланс)
-        //Вроде пока всё правильно. Теперь тут инициализируй таб (id/tabs), делай адаптер для работы viewpager и к нему подключай фрагменты.
-        //Ещё есть вопросы? А почему до этого крашилось приложение? Потому что фрагмент нужно вставлять в вьюху Fragment, а ты её вставлял в ConstraintLayout
-
         TabLayout tabLayout = findViewById(R.id.tabs);
 
         ViewPager viewPager = findViewById(R.id.viewpager);
@@ -46,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch(position) {
                 case 0: return new BudgetFragment();
-                case 1: return new BudgetFragment();
+                case 1: return new BudgetFragment_2();
                 case 2: return new BudgetFragment();
                 default: return new BudgetFragment();
             }

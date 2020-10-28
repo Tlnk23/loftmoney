@@ -15,17 +15,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.tlnk.loftmoney.cells.MoneyCellAdapter;
+import com.tlnk.loftmoney.cells.MoneyCellAdapter_2;
 import com.tlnk.loftmoney.cells.MoneyItem;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment_2 extends Fragment {
 
     private FloatingActionButton btnAdd;
     private RecyclerView itemsView;
-    private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
+    private MoneyCellAdapter_2 moneyCellAdapter_2 = new MoneyCellAdapter_2();
     private List<MoneyItem> moneyItems = new ArrayList<>();
 
     @Nullable
@@ -47,7 +47,7 @@ public class BudgetFragment extends Fragment {
             }
         });
 
-        itemsView.setAdapter(moneyCellAdapter);
+        itemsView.setAdapter(moneyCellAdapter_2);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
@@ -64,7 +64,7 @@ public class BudgetFragment extends Fragment {
         String priceAdd = data.getStringExtra("price");
 
         moneyItems.add(new MoneyItem(nameAdd, priceAdd + " ₽"));
-        moneyCellAdapter.setData(moneyItems);
+        moneyCellAdapter_2.setData(moneyItems);
 
     }
 }
