@@ -6,4 +6,8 @@
     <string name="expences">Expences</string>
     <string name="income">Income</string>
     <string name="balance">Balance</string>
+    <string name="connection_lost">Sorry, we cant load money list</string>
+    <string name="fill_items">Введите данные!</string>
+    <string name="syccess_add">Расход успешно добавлен</string>
+    <string name="error_add">Произошла ошибка</string>
 </resources>
