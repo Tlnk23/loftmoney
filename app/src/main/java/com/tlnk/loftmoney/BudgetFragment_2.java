@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,11 +16,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.tlnk.loftmoney.cells.MoneyCellAdapter;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter_2;
 import com.tlnk.loftmoney.cells.MoneyItem;
+import com.tlnk.loftmoney.remote.MoneyRemoteItem;
+import com.tlnk.loftmoney.remote.MoneyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment_2 extends Fragment {
 
@@ -27,6 +38,7 @@ public class BudgetFragment_2 extends Fragment {
     private RecyclerView itemsView;
     private MoneyCellAdapter_2 moneyCellAdapter_2 = new MoneyCellAdapter_2();
     private List<MoneyItem> moneyItems = new ArrayList<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Nullable
     @Override
@@ -54,7 +66,15 @@ public class BudgetFragment_2 extends Fragment {
 
         itemsView.setLayoutManager(layoutManager);
 
-    return view;
+        loadItems();
+
+        return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override
@@ -67,5 +87,32 @@ public class BudgetFragment_2 extends Fragment {
         moneyCellAdapter_2.setData(moneyItems);
 
     }
+
+    private void loadItems() {
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("expense")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MoneyResponse>() {
+                    @Override
+                    public void accept(MoneyResponse s) throws Exception {
+                        if (s.getStatus().equals("success")) {
+                            for (MoneyRemoteItem moneyRemoteItem : s.getMoneyItemsList()) {
+                                moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
+                            }
+
+                            moneyCellAdapter_2.setData(moneyItems);
+                        } else {
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
 }
 
