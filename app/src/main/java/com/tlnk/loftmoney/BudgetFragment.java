@@ -17,9 +17,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
 import com.tlnk.loftmoney.cells.MoneyItem;
+import com.tlnk.loftmoney.remote.MoneyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment {
 
@@ -27,6 +35,7 @@ public class BudgetFragment extends Fragment {
     private RecyclerView itemsView;
     private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
     private List<MoneyItem> moneyItems = new ArrayList<>();
+    private CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Nullable
     @Override
@@ -54,7 +63,33 @@ public class BudgetFragment extends Fragment {
 
         itemsView.setLayoutManager(layoutManager);
 
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("income")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<MoneyResponse>() {
+                    @Override
+                    public void accept(MoneyResponse s) throws Exception {
+                        if (MoneyResponse.getStatus().equals("success")) {
+
+                        } else {
+
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
+        compositeDisposable.add(disposable);
+
     return view;
+    }
+
+    @Override
+    public void onDestroy() {
+        compositeDisposable.dispose();
+        super.onDestroy();
     }
 
     @Override
@@ -65,7 +100,6 @@ public class BudgetFragment extends Fragment {
 
         moneyItems.add(new MoneyItem(nameAdd, priceAdd + " ₽"));
         moneyCellAdapter.setData(moneyItems);
-
     }
 }
 

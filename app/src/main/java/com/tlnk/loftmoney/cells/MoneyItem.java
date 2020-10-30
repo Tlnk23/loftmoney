@@ -1,5 +1,7 @@
 package com.tlnk.loftmoney.cells;
 
+import com.tlnk.loftmoney.remote.MoneyRemoteItem;
+
 public class MoneyItem {
 
     private String title;
@@ -16,5 +18,9 @@ public class MoneyItem {
 
     public String getValue() {
         return value;
+    }
+
+    public static MoneyItem  getInstance(MoneyRemoteItem moneyRemoteItem) {
+        return new MoneyItem(moneyRemoteItem.getName(), moneyRemoteItem.getPrice() + "₽");
     }
 }
