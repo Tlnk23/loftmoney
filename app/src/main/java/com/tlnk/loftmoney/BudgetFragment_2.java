@@ -34,7 +34,6 @@ import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment_2 extends Fragment {
 
-    private FloatingActionButton btnAdd;
     private RecyclerView itemsView;
     private MoneyCellAdapter_2 moneyCellAdapter_2 = new MoneyCellAdapter_2();
     private List<MoneyItem> moneyItems = new ArrayList<>();
@@ -49,15 +48,6 @@ public class BudgetFragment_2 extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         itemsView.addItemDecoration(dividerItemDecoration);
-
-        btnAdd = view.findViewById(R.id.addNewExpense);
-        btnAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddItemActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
 
         itemsView.setAdapter(moneyCellAdapter_2);
 
