@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
@@ -37,6 +38,7 @@ public class BudgetFragment extends Fragment {
     private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
     private List<MoneyItem> moneyItems = new ArrayList<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -47,16 +49,20 @@ public class BudgetFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), DividerItemDecoration.VERTICAL);
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         itemsView.addItemDecoration(dividerItemDecoration);
-
-
         itemsView.setAdapter(moneyCellAdapter);
-
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
-
         itemsView.setLayoutManager(layoutManager);
 
         loadItems();
+
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
 
         return view;
     }
@@ -86,10 +92,11 @@ public class BudgetFragment extends Fragment {
                     @Override
                     public void accept(MoneyResponse s) throws Exception {
                         if (s.getStatus().equals("success")) {
+                            mSwipeRefreshLayout.setRefreshing(false);
+                            moneyCellAdapter.clearItems();
                             for (MoneyRemoteItem moneyRemoteItem : s.getMoneyItemsList()) {
                                 moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
                             }
-
                             moneyCellAdapter.setData(moneyItems);
                         } else {
                             Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
@@ -98,6 +105,7 @@ public class BudgetFragment extends Fragment {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
+                        mSwipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                     }
                 });

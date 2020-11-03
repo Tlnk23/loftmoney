@@ -10,4 +10,5 @@
     <string name="fill_items">Введите данные!</string>
     <string name="syccess_add">Расход успешно добавлен</string>
     <string name="error_add">Произошла ошибка</string>
+    <string name="activity_main_toolbar_title">Учет бюджета</string>
 </resources>

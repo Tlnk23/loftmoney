@@ -8,4 +8,5 @@
     <color name="textColor">#666664</color>
     <color name="priceColor">#4a90e2</color>
     <color name="priceColor_2">#7ed321</color>
+    <color name="apple_green">#7ed321</color>
 </resources>

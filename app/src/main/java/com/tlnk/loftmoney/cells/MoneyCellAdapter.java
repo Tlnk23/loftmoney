@@ -18,7 +18,10 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
     private Button addButton;
     private List<MoneyItem> moneyItemList = new ArrayList<>();
 
-
+    public void clearItems() {
+        moneyItemList.clear();
+        notifyDataSetChanged();
+    }
 
     public void setData(List<MoneyItem> moneyItems) {
             moneyItemList.clear();
@@ -61,4 +64,6 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
             valueTextView.setText((moneyItem.getValue()));
         }
     }
+
+
 }

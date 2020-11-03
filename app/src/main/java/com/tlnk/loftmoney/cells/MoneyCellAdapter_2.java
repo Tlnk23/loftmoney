@@ -18,7 +18,10 @@ public class MoneyCellAdapter_2 extends RecyclerView.Adapter<MoneyCellAdapter_2.
     private Button addButton;
     private List<MoneyItem> moneyItemList = new ArrayList<>();
 
-
+    public void clearItems() {
+        moneyItemList.clear();
+        notifyDataSetChanged();
+    }
 
     public void setData(List<MoneyItem> moneyItems) {
             moneyItemList.clear();

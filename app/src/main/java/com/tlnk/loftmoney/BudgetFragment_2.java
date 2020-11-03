@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
@@ -38,6 +39,7 @@ public class BudgetFragment_2 extends Fragment {
     private MoneyCellAdapter_2 moneyCellAdapter_2 = new MoneyCellAdapter_2();
     private List<MoneyItem> moneyItems = new ArrayList<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Nullable
     @Override
@@ -55,6 +57,14 @@ public class BudgetFragment_2 extends Fragment {
                 LinearLayoutManager.VERTICAL, false);
 
         itemsView.setLayoutManager(layoutManager);
+
+        mSwipeRefreshLayout = view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                loadItems();
+            }
+        });
 
         loadItems();
 
@@ -86,6 +96,7 @@ public class BudgetFragment_2 extends Fragment {
                     @Override
                     public void accept(MoneyResponse s) throws Exception {
                         if (s.getStatus().equals("success")) {
+                            moneyCellAdapter_2.clearItems();
                             for (MoneyRemoteItem moneyRemoteItem : s.getMoneyItemsList()) {
                                 moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
                             }
