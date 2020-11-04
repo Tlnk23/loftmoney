@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -31,6 +32,9 @@ private Button addButton;
 private CompositeDisposable compositeDisposable = new CompositeDisposable();
 private String mName;
 private String mPrice;
+private Bundle indexBundle;
+private int fragmentIndex;
+private String fragmentType;
 
     @Override
     protected void onResume() {
@@ -46,11 +50,27 @@ private String mPrice;
         editName = (EditText) findViewById(R.id.edit_name);
         editPrice = (EditText) findViewById(R.id.edit_price);
         addButton = (Button) findViewById(R.id.add_button);
+        indexBundle = getIntent().getExtras();
+        fragmentIndex = indexBundle.getInt("activeFragmentIndex");
+        if (fragmentIndex == 0) {
+            fragmentType = "income";
+        } else {
+            fragmentType = "expense";
+        }
+
+
 
         editName.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+                if(fragmentIndex == 0) {
+                    editName.setTextColor(Color.parseColor("#3574fa"));
+                    editPrice.setTextColor(Color.parseColor("#3574fa"));
+                } else {
+                    editName.setTextColor(Color.parseColor("#7ed321"));
+                    editPrice.setTextColor(Color.parseColor("#7ed321"));
+                }
             }
 
             @Override
@@ -68,6 +88,14 @@ private String mPrice;
         editPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                if(fragmentIndex == 0) {
+                    editName.setTextColor(Color.parseColor("#3574fa"));
+                    editPrice.setTextColor(Color.parseColor("#3574fa"));
+                } else {
+                    editName.setTextColor(Color.parseColor("#7ed321"));
+                    editPrice.setTextColor(Color.parseColor("#7ed321"));
+                }
 
             }
 
@@ -112,7 +140,7 @@ private String mPrice;
                         Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
                                 Integer.parseInt(editPrice.getText().toString()),
                                 editName.getText().toString(),
-                                "income")
+                                fragmentType)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Action() {

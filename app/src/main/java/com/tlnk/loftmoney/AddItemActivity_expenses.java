@@ -1,6 +1,7 @@
 package com.tlnk.loftmoney;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -38,7 +39,7 @@ private String mPrice;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_item);
+        setContentView(R.layout.activity_add_item_expenses);
 
         editName = (EditText) findViewById(R.id.edit_name);
         editPrice = (EditText) findViewById(R.id.edit_price);
@@ -52,7 +53,8 @@ private String mPrice;
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                editName.setTextColor(Color.parseColor("#7ed321"));
+                editPrice.setTextColor(Color.parseColor("#7ed321"));
             }
 
             @Override
@@ -109,7 +111,7 @@ private String mPrice;
                         Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
                                 Integer.parseInt(editPrice.getText().toString()),
                                 editName.getText().toString(),
-                                "income")
+                                "expense")
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Action() {

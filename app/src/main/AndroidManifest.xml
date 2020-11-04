@@ -21,6 +21,7 @@
         </activity>
 
         <activity android:name=".AddItemActivity" android:theme="@style/AddItemTheme"/>
+        <activity android:name=".AddItemActivity_expenses" android:theme="@style/AddItemTheme"/>
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ package com.tlnk.loftmoney;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,8 +34,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final int activeFragmentIndex = viewPager.getCurrentItem();
                 Fragment activeFragment = getSupportFragmentManager().getFragments().get(activeFragmentIndex);
-                Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
-                activeFragment.startActivityForResult(intent, 0);
+                    Intent intent = new Intent(MainActivity.this, AddItemActivity.class);
+                    intent.putExtra("activeFragmentIndex", activeFragmentIndex);
+                    activeFragment.startActivityForResult(intent, 0);
             }
         });
 
