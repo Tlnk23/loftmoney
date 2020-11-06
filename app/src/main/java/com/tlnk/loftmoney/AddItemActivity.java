@@ -140,7 +140,8 @@ private String fragmentType;
                         Disposable disposable = ((LoftApp) getApplication()).moneyApi.postMoney(
                                 Integer.parseInt(editPrice.getText().toString()),
                                 editName.getText().toString(),
-                                fragmentType)
+                                fragmentType,
+                                getSharedPreferences(getString(R.string.app_name), 0).getString(LoftApp.AUTH_KEY, ""))
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Action() {

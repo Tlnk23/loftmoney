@@ -13,15 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity"/>
-        <activity android:name=".remote.screens.splash.SplashActivity">
+        <activity android:name=".screens.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".remote.screens.login.LoginActivity"/>
+        <activity android:name=".screens.login.LoginActivity"/>
         <activity android:name=".AddItemActivity" android:theme="@style/AddItemTheme"/>
-        <activity android:name=".AddItemActivity_expenses" android:theme="@style/AddItemTheme"/>
     </application>
 
 </manifest>

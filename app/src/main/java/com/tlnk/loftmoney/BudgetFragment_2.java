@@ -2,6 +2,7 @@ package com.tlnk.loftmoney;
 
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +45,10 @@ public class BudgetFragment_2 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
+
         View view = inflater.inflate(R.layout.fragment_budget, null);
         itemsView = view.findViewById(R.id.itemsView);
 
@@ -62,11 +67,11 @@ public class BudgetFragment_2 extends Fragment {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                loadItems();
+                loadItems(authToken);
             }
         });
 
-        loadItems();
+        loadItems(authToken);
 
         return view;
     }
@@ -88,29 +93,21 @@ public class BudgetFragment_2 extends Fragment {
 
     }
 
-    private void loadItems() {
-        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("expense")
+    private void loadItems(String authToken) {
+        Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("expense", authToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<MoneyResponse>() {
-                    @Override
-                    public void accept(MoneyResponse s) throws Exception {
-                        if (s.getStatus().equals("success")) {
-                            moneyCellAdapter_2.clearItems();
-                            for (MoneyRemoteItem moneyRemoteItem : s.getMoneyItemsList()) {
-                                moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
-                            }
+                .subscribe(moneyRemoteItems -> {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    moneyCellAdapter_2.clearItems();
+                    for (MoneyRemoteItem moneyRemoteItem : moneyRemoteItems) {
+                        moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
+                    }
+                    moneyCellAdapter_2.setData(moneyItems);
 
-                            moneyCellAdapter_2.setData(moneyItems);
-                        } else {
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.connection_lost), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-                    }
+                }, throwable -> {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 });
         compositeDisposable.add(disposable);
     }

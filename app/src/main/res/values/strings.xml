@@ -11,4 +11,8 @@
     <string name="syccess_add">Расход успешно добавлен</string>
     <string name="error_add">Произошла ошибка</string>
     <string name="activity_main_toolbar_title">Учет бюджета</string>
+    <string name="action_login">Войти</string>
+
+    <string name="client_secrtet">jWSjsC2D6zapI8dwg_Fk-pKS</string>
+    <string name="client_id">869832968525-4931v678vt1tqskuj0k78v84nkqcbmo4.apps.googleusercontent.com</string>
 </resources>

@@ -40,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.getTabAt(0).setText(R.string.expences);
         tabLayout.getTabAt(1).setText(R.string.income);
@@ -69,4 +68,5 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
     }
+
 }
