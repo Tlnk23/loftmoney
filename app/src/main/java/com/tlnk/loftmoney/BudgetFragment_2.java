@@ -103,6 +103,13 @@ public class BudgetFragment_2 extends Fragment {
                     for (MoneyRemoteItem moneyRemoteItem : moneyRemoteItems) {
                         moneyItems.add(MoneyItem.getInstance(moneyRemoteItem));
                     }
+
+                    for (int i = 0; i < moneyItems.size() / 2; i++) {
+                        MoneyItem tmp = moneyItems.get(i);
+                        moneyItems.set(i, moneyItems.get(moneyItems.size() - i - 1));
+                        moneyItems.set(moneyItems.size() - i - 1, tmp);
+                    }
+
                     moneyCellAdapter_2.setData(moneyItems);
 
                 }, throwable -> {
