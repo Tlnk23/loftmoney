@@ -9,4 +9,6 @@
     <color name="priceColor">#4a90e2</color>
     <color name="priceColor_2">#7ed321</color>
     <color name="apple_green">#7ed321</color>
+    <color name="dark_gray_blue">#333f59</color>
+    <color name="white_five">#f2f2f2</color>
 </resources>

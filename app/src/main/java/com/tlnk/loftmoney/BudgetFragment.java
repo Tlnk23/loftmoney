@@ -3,9 +3,13 @@ package com.tlnk.loftmoney;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.drm.DrmStore;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,13 +39,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-public class BudgetFragment extends Fragment {
+public class BudgetFragment extends Fragment implements MoneyItemAdapterListner, ActionMode.Callback {
 
     private RecyclerView itemsView;
     private MoneyCellAdapter moneyCellAdapter = new MoneyCellAdapter();
     private List<MoneyItem> moneyItems = new ArrayList<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private ActionMode actionMode;
 
     @Nullable
     @Override
@@ -57,6 +62,8 @@ public class BudgetFragment extends Fragment {
         dividerItemDecoration.setDrawable(getResources().getDrawable(R.drawable.recyclerview_divider));
         itemsView.addItemDecoration(dividerItemDecoration);
         itemsView.setAdapter(moneyCellAdapter);
+        moneyCellAdapter.setListner(this);
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext(),
                 LinearLayoutManager.VERTICAL, false);
         itemsView.setLayoutManager(layoutManager);
@@ -116,5 +123,47 @@ public class BudgetFragment extends Fragment {
         compositeDisposable.add(disposable);
     }
 
+    @Override
+    public void onItemClick(MoneyItem moneyItem, int position) {
+        moneyCellAdapter.clearItem(position);
+
+        if (actionMode != null) {
+            actionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public void onItemLongClick(MoneyItem moneyItem, int position) {
+        if (actionMode == null) {
+            getActivity().startActionMode(this);
+        }
+        moneyCellAdapter.toggleItem(position);
+
+        if (actionMode != null) {
+            actionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
+        }
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        actionMode = actionMode;
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        actionMode = null;
+        moneyCellAdapter.clearSelections();
+    }
 }
 
