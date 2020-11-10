@@ -29,7 +29,7 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
     }
 
     public void toggleItem(final int position) {
-        selectedItems.put(position, selectedItems.get(position));
+        selectedItems.put(position, !selectedItems.get(position));
         notifyDataSetChanged();
     }
 
@@ -38,20 +38,30 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
         notifyDataSetChanged();
     }
 
-
-
-    public void setListner(final MoneyItemAdapterListner listner) {
-        mListner = listner;
-    }
-
     public int getSelectedSize() {
         int result = 0;
-        for (int i = 0; i < selectedItems.size(); i++) {
+        for (int i = 0; i < moneyItemList.size(); i++) {
             if (selectedItems.get(i)) {
                 result++;
             }
         }
         return result;
+    }
+
+    public List<Integer> getSelectedItemId() {
+        List<Integer> result = new ArrayList<>();
+        int i = 0;
+        for (MoneyItem moneyItem: moneyItemList) {
+            if (selectedItems.get(i)) {
+                result.add(moneyItem.getId());
+            }
+            i++;
+        }
+        return result;
+    }
+
+    public void setListner(final MoneyItemAdapterListner listner) {
+        mListner = listner;
     }
 
     public void clearItems() {
@@ -104,17 +114,17 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
             valueTextView.setText((moneyItem.getValue()));
         }
 
-        public void setListner(MoneyItemAdapterListner listner, final MoneyItem moneyItem, final int position) {
+        public void setListner(final MoneyItemAdapterListner listner, final MoneyItem moneyItem, final int position) {
             mItemView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onClick(View view) {
+                public void onClick(final View view) {
                     listner.onItemClick(moneyItem, position);
                 }
             });
 
             mItemView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
-                public boolean onLongClick(View view) {
+                public boolean onLongClick(final View view) {
                     listner.onItemLongClick(moneyItem, position);
                     return false;
                 }

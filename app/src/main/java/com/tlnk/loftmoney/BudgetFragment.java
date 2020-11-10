@@ -1,14 +1,18 @@
 package com.tlnk.loftmoney;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.drm.DrmStore;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +30,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
 import com.tlnk.loftmoney.cells.MoneyItem;
+import com.tlnk.loftmoney.remote.MoneyApi;
 import com.tlnk.loftmoney.remote.MoneyRemoteItem;
 import com.tlnk.loftmoney.remote.MoneyResponse;
 
@@ -46,14 +51,13 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
     private List<MoneyItem> moneyItems = new ArrayList<>();
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private ActionMode actionMode;
+    private ActionMode mActionMode;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
         String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
-
 
         View view = inflater.inflate(R.layout.fragment_budget, null);
         itemsView = view.findViewById(R.id.itemsView);
@@ -127,42 +131,64 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
     public void onItemClick(MoneyItem moneyItem, int position) {
         moneyCellAdapter.clearItem(position);
 
-        if (actionMode != null) {
-            actionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
         }
     }
 
     @Override
     public void onItemLongClick(MoneyItem moneyItem, int position) {
-        if (actionMode == null) {
+        if (mActionMode == null) {
             getActivity().startActionMode(this);
         }
         moneyCellAdapter.toggleItem(position);
 
-        if (actionMode != null) {
-            actionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
+        if (mActionMode != null) {
+            mActionMode.setTitle(getString(R.string.selected, String.valueOf(moneyCellAdapter.getSelectedSize())));
         }
     }
 
     @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        actionMode = actionMode;
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        mActionMode = actionMode;
         return true;
     }
 
     @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        MenuInflater menuInflater = new MenuInflater(getActivity());
+        menuInflater.inflate(R.menu.menu_delete, menu);
         return true;
     }
 
     @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
+        if (menuItem.getItemId() == R.id.remove) {
+            new AlertDialog.Builder(getContext())
+                    .setMessage(R.string.confirmation)
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+                    }).show();
+        }
         return true;
     }
 
+    /* private void removeItems() {
+        String token = authToken;
+        List<Integer> selectedItems = moneyCellAdapter.getSelectedItemId();
+    } */
+
     @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        actionMode = null;
+    public void onDestroyActionMode(ActionMode actionMode) {
+        mActionMode = null;
         moneyCellAdapter.clearSelections();
     }
 }
