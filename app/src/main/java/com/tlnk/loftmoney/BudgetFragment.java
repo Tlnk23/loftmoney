@@ -1,14 +1,10 @@
 package com.tlnk.loftmoney;
 
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.drm.DrmStore;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,7 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,21 +22,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.tlnk.loftmoney.cells.MoneyCellAdapter;
 import com.tlnk.loftmoney.cells.MoneyItem;
-import com.tlnk.loftmoney.remote.MoneyApi;
 import com.tlnk.loftmoney.remote.MoneyRemoteItem;
-import com.tlnk.loftmoney.remote.MoneyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class BudgetFragment extends Fragment implements MoneyItemAdapterListner, ActionMode.Callback {
@@ -81,7 +71,6 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
                 loadItems(authToken);
             }
         });
-
         return view;
     }
 
@@ -99,11 +88,9 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
 
         moneyItems.add(new MoneyItem(nameAdd, priceAdd + " ₽"));
         moneyCellAdapter.setData(moneyItems);
-
     }
 
     private void loadItems(String authToken) {
-
         Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.getMoneyItems("income", authToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -125,6 +112,27 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
                     Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                 });
         compositeDisposable.add(disposable);
+    }
+
+    private void removeMooney() {
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences(getString(R.string.app_name), 0);
+        String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
+        List<Integer> selectedItems = moneyCellAdapter.getSelectedItemId();
+
+        for (Integer itemId : selectedItems) {
+            Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.removeMoney(itemId, authToken)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(moneyRemoteItems -> {
+                                loadItems();
+                                moneyCellAdapter.clearSelections();
+                            },
+                            throwable -> {
+                                mSwipeRefreshLayout.setRefreshing(false);
+                                Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+                            });
+            compositeDisposable.add(disposable);
+        }
     }
 
     @Override
@@ -169,12 +177,12 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            removeMooney();
                         }
                     })
                     .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
                         }
                     }).show();
         }
