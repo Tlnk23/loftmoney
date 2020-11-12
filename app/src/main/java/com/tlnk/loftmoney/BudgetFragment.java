@@ -119,7 +119,7 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
         String authToken = sharedPreferences.getString(LoftApp.AUTH_KEY, "");
         List<Integer> selectedItems = moneyCellAdapter.getSelectedItemId();
 
-        for (Integer itemId : selectedItems) {
+        /* for (Integer itemId : selectedItems) {
             Disposable disposable = ((LoftApp) getActivity().getApplication()).moneyApi.removeMoney(itemId, authToken)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -132,7 +132,7 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
                                 Toast.makeText(getActivity().getApplicationContext(), throwable.getLocalizedMessage(), Toast.LENGTH_LONG).show();
                             });
             compositeDisposable.add(disposable);
-        }
+        }*/
     }
 
     @Override
@@ -188,11 +188,6 @@ public class BudgetFragment extends Fragment implements MoneyItemAdapterListner,
         }
         return true;
     }
-
-    /* private void removeItems() {
-        String token = authToken;
-        List<Integer> selectedItems = moneyCellAdapter.getSelectedItemId();
-    } */
 
     @Override
     public void onDestroyActionMode(ActionMode actionMode) {
