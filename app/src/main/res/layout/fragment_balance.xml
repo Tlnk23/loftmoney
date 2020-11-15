@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/txtBalanceFinance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/balance_finance_title"
+        android:textSize="14sp"
+        android:fontFamily="sans-serif-light"
+        android:textColor="@color/primaryTextColor"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="37dp"
+        android:layout_marginStart="19dp"/>
+
+    <TextView
+        android:id="@+id/txtBalanceFinanceValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="67000₽"
+        app:layout_constraintTop_toBottomOf="@+id/txtBalanceFinance"
+        app:layout_constraintStart_toStartOf="@+id/txtBalanceFinance"
+        android:textSize="48sp"
+        android:fontFamily="sans-serif-medium"
+        android:textColor="@color/orange" />
+
+    <View
+        android:id="@+id/dividerFinance"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor"
+        app:layout_constraintTop_toBottomOf="@+id/txtBalanceFinanceValue"
+        android:layout_marginTop="38dp" />
+
+    <LinearLayout
+        android:id="@+id/llCosts"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="26dp"
+        android:paddingBottom="26dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/dividerFinance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/llIncomes" >
+
+        <TextView
+            android:id="@+id/txtBalanceCosts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/cost"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-light" />
+
+        <TextView
+            android:id="@+id/my_expences"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="540000₽"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/colorPrimary" />
+
+    </LinearLayout>
+    
+    <com.tlnk.loftmoney.BalanceView
+        android:id="@+id/balanceView"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="36dp"
+        app:layout_constraintTop_toBottomOf="@+id/dividerData"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/llIncomes"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingTop="26dp"
+        android:paddingBottom="26dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintTop_toBottomOf="@id/dividerFinance"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/llCosts" >
+
+        <TextView
+            android:id="@+id/txtBalanceIncome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/income"
+            android:textColor="@color/primaryTextColor"
+            android:textSize="10sp"
+            android:fontFamily="sans-serif-light" />
+
+        <TextView
+            android:id="@+id/my_income"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="74000₽"
+            android:textSize="24sp"
+            android:fontFamily="sans-serif-medium"
+            android:textColor="@color/colorGreen" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/dividerData"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor"
+        app:layout_constraintTop_toBottomOf="@+id/llIncomes" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

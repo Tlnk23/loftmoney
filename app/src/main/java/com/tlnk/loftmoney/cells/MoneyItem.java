@@ -13,6 +13,8 @@ public class MoneyItem {
         this.value = value;
     }
 
+
+
     public int getId() {
         return id;
     }
@@ -24,6 +26,8 @@ public class MoneyItem {
     public String getValue() {
         return value;
     }
+
+
 
     public static MoneyItem  getInstance(MoneyRemoteItem moneyRemoteItem) {
         return new MoneyItem(moneyRemoteItem.getName(), moneyRemoteItem.getPrice() + "₽");

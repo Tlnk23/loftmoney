@@ -1,9 +1,12 @@
 package com.tlnk.loftmoney.remote;
 
+import com.google.android.gms.common.api.Status;
+
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
+import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -19,9 +22,9 @@ public interface MoneyApi {
     @FormUrlEncoded
     Completable postMoney(@Field("price") int price, @Field("name") String name, @Field("type") String type, @Field("auth-token") String authToken);
 
-    @POST("./items/remove")
-    @FormUrlEncoded
-    Completable removeMoney(@Field("id") int itemId, @Field("auth-token") String authToken);
+    @GET("./items/remove")
+    Completable removeMoney(@Query("id") int itemId, @Query("auth-token") String authToken);
 
-
+    @GET("balance")
+    Call<BalanceResponce> getBalance(@Query("auth-token") String token);
 }

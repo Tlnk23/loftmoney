@@ -13,9 +13,13 @@
     <string name="activity_main_toolbar_title">Учет бюджета</string>
     <string name="action_login">Войти</string>
 
-    <string name="client_secrtet">jWSjsC2D6zapI8dwg_Fk-pKS</string>
-    <string name="client_id">869832968525-4931v678vt1tqskuj0k78v84nkqcbmo4.apps.googleusercontent.com</string>
+    <string name="client_secrtet">bRI8np4OIdct4tPx0pLZoqW3</string>
+    <string name="client_id">115945722924-fo36vbbn5392dplihph57se3b0m0h0a0.apps.googleusercontent.com</string>
     <string name="selected">Выделено: %1$s</string>
     <string name="remove">Удалить</string>
     <string name="confirmation">ВЫ действительно хотите удалить выбранные пункты?</string>
+    <string name="balance_finance_title">Доступные финансы</string>
+    <string name="cost">Расход</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

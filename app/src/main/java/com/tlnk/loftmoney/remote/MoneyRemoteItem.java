@@ -19,6 +19,12 @@ public class MoneyRemoteItem {
     @SerializedName("date")
     private String date;
 
+    @SerializedName("total_expenses")
+    private String total_expenses;
+
+    @SerializedName("total_income")
+    private String total_income;
+
     public String getItemId() {
         return itemId;
     }
@@ -57,5 +63,13 @@ public class MoneyRemoteItem {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getExpenses() {
+        return total_expenses;
+    }
+
+    public String getIncome() {
+        return total_income;
     }
 }

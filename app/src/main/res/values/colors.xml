@@ -11,4 +11,8 @@
     <color name="apple_green">#7ed321</color>
     <color name="dark_gray_blue">#333f59</color>
     <color name="white_five">#f2f2f2</color>
+    <color name="primaryTextColor">#666664</color>
+    <color name="orange">#ff9e57</color>
+    <color name="dividerColor">#efefef</color>
+    <color name="colorGreen">#7ed321</color>
 </resources>

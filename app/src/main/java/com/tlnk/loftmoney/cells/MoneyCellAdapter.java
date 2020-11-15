@@ -29,12 +29,12 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
     }
 
     public void toggleItem(final int position) {
-        selectedItems.put(position, !selectedItems.get(position));
-        notifyDataSetChanged();
-    }
+        if (selectedItems.get(position) == true) {
+            selectedItems.put(position, false);
+        } else  {
+            selectedItems.put(position, true);
+        }
 
-    public void clearItem(final int position) {
-        selectedItems.put(position, false);
         notifyDataSetChanged();
     }
 
@@ -51,9 +51,9 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
     public List<Integer> getSelectedItemId() {
         List<Integer> result = new ArrayList<>();
         int i = 0;
-        for (MoneyItem moneyItem: moneyItemList) {
+        for (MoneyItem item: moneyItemList) {
             if (selectedItems.get(i)) {
-                result.add(moneyItem.getId());
+                result.add(item.getId());
             }
             i++;
         }
@@ -78,13 +78,13 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
 
     @NonNull
     @Override
-    public MoneyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public MoneyViewHolder onCreateViewHolder(@NonNull final ViewGroup parent, final int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         return new MoneyViewHolder(layoutInflater.inflate(R.layout.cell_money, parent, false)) ;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MoneyViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final MoneyViewHolder holder, final int position) {
         holder.bind(moneyItemList.get(position), selectedItems.get(position));
         holder.setListner(mListner, moneyItemList.get(position), position);
     }
@@ -100,15 +100,15 @@ public class MoneyCellAdapter extends RecyclerView.Adapter<MoneyCellAdapter.Mone
         private TextView valueTextView;
         private View mItemView;
 
-        public MoneyViewHolder(@NonNull View itemView) {
+        public MoneyViewHolder(@NonNull final View itemView) {
             super(itemView);
 
             mItemView = itemView;
             titleTextView = itemView.findViewById(R.id.moneyCellTitleView);
-            valueTextView = itemView.findViewById(R.id.moneyCellValueView);
+            valueTextView = itemView.findViewById(R.id.priceText);
         }
 
-        public void bind(MoneyItem moneyItem, final boolean isSelected) {
+        public void bind(final MoneyItem moneyItem, final boolean isSelected) {
             itemView.setSelected(isSelected);
             titleTextView.setText(moneyItem.getTitle());
             valueTextView.setText((moneyItem.getValue()));

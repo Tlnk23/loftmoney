@@ -22,8 +22,13 @@ import com.google.android.material.tabs.TabLayout;
 
 public class MainActivity extends AppCompatActivity {
 
+
     private TabLayout tabLayout;
     private Toolbar toolbar;
+
+    public void changeColor() {
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,8 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public Fragment getItem(int position) {
             switch(position) {
-                case 0: return new BudgetFragment();
-                case 1: return new BudgetFragment_2();
-                case 2: return new BudgetFragment();
-                default: return new BudgetFragment();
+                case 2: return new DiagramFragment();
+                default: return new BudgetFragment().newInstance(position);
             }
         }
 
@@ -90,5 +93,6 @@ public class MainActivity extends AppCompatActivity {
             return 3;
         }
     }
+
 
 }
